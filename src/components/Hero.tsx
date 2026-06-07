@@ -1,24 +1,27 @@
 import videoAsset from "@/assets/hero-drones.mp4.asset.json";
+import ambientAsset from "@/assets/ambient-skyline.mp4.asset.json";
 import { Starfield } from "./Starfield";
 
 export function Hero() {
   return (
     <section className="relative min-h-[100svh] w-full overflow-hidden">
-      {/* Video layer */}
+      {/* Layered video backgrounds */}
       <video
         src={videoAsset.url}
-        autoPlay
-        muted
-        loop
-        playsInline
+        autoPlay muted loop playsInline
         className="absolute inset-0 h-full w-full object-cover opacity-50"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--obsidian)]/60 via-[color:var(--obsidian)]/30 to-[color:var(--obsidian)]" />
+      <video
+        src={ambientAsset.url}
+        autoPlay muted loop playsInline
+        className="absolute inset-0 h-full w-full object-cover mix-blend-screen opacity-30"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--obsidian)]/70 via-[color:var(--obsidian)]/40 to-[color:var(--obsidian)]" />
       <div className="absolute inset-0">
         <Starfield density={1.4} />
       </div>
 
-      {/* Orbit ring decoration */}
+      {/* Orbits */}
       <div className="pointer-events-none absolute -right-40 top-1/4 h-[800px] w-[800px] rounded-full border border-white/5 animate-orbit">
         <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-[color:var(--photonic-cyan)] glow-cyan" />
       </div>
@@ -26,13 +29,13 @@ export function Hero() {
         <div className="absolute top-1/2 -right-1.5 h-2 w-2 -translate-y-1/2 rounded-full bg-[color:var(--aurora-violet)] glow-violet" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-between px-6 pt-32 pb-12">
+      <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col px-6 pt-32 pb-16">
         <div className="flex items-center gap-3 text-xs tracking-[0.4em] uppercase text-[color:var(--photonic-cyan)]/80">
           <span className="h-px w-10 bg-[color:var(--photonic-cyan)]/60" />
           Lucen Sky · Atmospheric Media
         </div>
 
-        <div className="max-w-4xl">
+        <div className="max-w-4xl mt-auto">
           <h1 className="font-display text-[clamp(2.6rem,7vw,6.4rem)] leading-[0.95] font-light text-grad">
             The sky is becoming<br />
             <span className="italic font-extralight">a new medium.</span>
@@ -43,7 +46,7 @@ export function Hero() {
             measurable canvas.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <div className="mt-12 flex flex-wrap items-center gap-4">
             <a
               href="#experience"
               className="group relative rounded-full bg-[color:var(--photonic-cyan)] px-7 py-3 text-sm font-medium text-[color:var(--primary-foreground)] transition-transform hover:scale-[1.02] glow-cyan"
@@ -59,8 +62,8 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Bottom HUD */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        {/* Spacer pushes HUD to bottom with breathing room */}
+        <div className="mt-24 md:mt-32 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {[
             { k: "Drones in fleet", v: "12,400" },
             { k: "Active sky-cells", v: "38" },
