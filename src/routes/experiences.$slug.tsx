@@ -94,13 +94,13 @@ function ExperienceDetail() {
             The story behind the show.
           </h2>
           <div className="space-y-6 text-foreground/80 leading-relaxed text-lg">
-            {exp.story.map((p, i) => (
+            {exp.story.map((p: string, i: number) => (
               <p key={i} className="relative pl-6 border-l border-[color:var(--photonic-cyan)]/30">{p}</p>
             ))}
           </div>
         </div>
         <aside className="lg:col-span-5 space-y-3">
-          {exp.stats.map((s) => (
+          {exp.stats.map((s: { k: string; v: string }) => (
             <div key={s.k} className="glass rounded-2xl p-5 flex items-baseline justify-between ring-hairline">
               <div className="text-xs tracking-[0.25em] uppercase text-muted-foreground">{s.k}</div>
               <div className="font-mono text-2xl text-[color:var(--photonic-cyan)]">{s.v}</div>
