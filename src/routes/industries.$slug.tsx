@@ -35,7 +35,7 @@ export const Route = createFileRoute("/industries/$slug")({
 });
 
 function IndustryPage() {
-  const ind = Route.useLoaderData();
+  const ind = Route.useLoaderData() as Industry;
   const others = industries.filter((i) => i.slug !== ind.slug).slice(0, 4);
 
   return (
