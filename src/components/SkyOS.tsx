@@ -1,4 +1,89 @@
+import { useEffect, useRef, useState } from "react";
+
+type LogEntry = { t: string; msg: string; tone: "info" | "ok" | "warn" | "cue" };
+
+const LOG_POOL: Omit<LogEntry, "t">[] = [
+  { msg: "formation A → B  ok", tone: "ok" },
+  { msg: "drift correction Δ 0.04m", tone: "info" },
+  { msg: "cluster-7 link 5GHz stable", tone: "info" },
+  { msg: "light cue #014  start", tone: "cue" },
+  { msg: "battery 76% nominal", tone: "ok" },
+  { msg: "wind shear -2°  stable", tone: "info" },
+  { msg: "formation B → C  ok", tone: "ok" },
+  { msg: "vertex 412 reassigned", tone: "info" },
+  { msg: "swarm coherence 0.998", tone: "ok" },
+  { msg: "light cue #015  start", tone: "cue" },
+  { msg: "payload sync 1.2 MB", tone: "info" },
+  { msg: "attention map +3.4%", tone: "info" },
+  { msg: "gps lock 14 sats", tone: "ok" },
+  { msg: "thermals nominal 42°C", tone: "info" },
+  { msg: "geofence breach Δ 0.3m", tone: "warn" },
+  { msg: "uplink latency 22ms", tone: "info" },
+  { msg: "rotor health 99.1%", tone: "ok" },
+  { msg: "light cue #016  start", tone: "cue" },
+  { msg: "frame 4128 rendered", tone: "info" },
+  { msg: "mesh handoff cluster-3", tone: "info" },
+  { msg: "wind gust +1.4 m/s", tone: "warn" },
+  { msg: "showtime sync ±2ms", tone: "ok" },
+];
+
+const fmt = (d: Date) =>
+  `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`;
+
+function Sparkline({ color, seed = 0 }: { color: string; seed?: number }) {
+  const [pts, setPts] = useState<number[]>(() =>
+    Array.from({ length: 28 }, (_, i) => 0.5 + Math.sin((i + seed) * 0.6) * 0.25)
+  );
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPts((p) => {
+        const next = p.slice(1);
+        const last = next[next.length - 1] ?? 0.5;
+        const v = Math.max(0.05, Math.min(0.95, last + (Math.random() - 0.5) * 0.22));
+        next.push(v);
+        return next;
+      });
+    }, 700);
+    return () => clearInterval(id);
+  }, []);
+  const path = pts
+    .map((v, i) => `${i === 0 ? "M" : "L"} ${(i / (pts.length - 1)) * 100} ${100 - v * 100}`)
+    .join(" ");
+  return (
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-8">
+      <path d={path} fill="none" stroke={color} strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+      <path d={`${path} L 100 100 L 0 100 Z`} fill={color} opacity="0.12" />
+    </svg>
+  );
+}
+
 export function SkyOS() {
+  const [logs, setLogs] = useState<LogEntry[]>(() =>
+    LOG_POOL.slice(0, 12).map((l, i) => ({ ...l, t: fmt(new Date(Date.now() - (12 - i) * 1500)) }))
+  );
+  const logRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setLogs((prev) => {
+        const next = [...prev, { ...LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)], t: fmt(new Date()) }];
+        return next.slice(-60);
+      });
+    }, 900);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [logs]);
+
+  const toneColor: Record<LogEntry["tone"], string> = {
+    info: "text-muted-foreground",
+    ok: "text-[color:var(--photonic-cyan)]",
+    warn: "text-[color:var(--aurora-violet)]",
+    cue: "text-[color:var(--holographic-white)]",
+  };
+
   return (
     <section id="sky-os" className="relative py-32 overflow-hidden">
       <div className="absolute inset-0 grid-lines opacity-20" />
@@ -36,7 +121,6 @@ export function SkyOS() {
 
             {/* Center: radar/viewport */}
             <div className="lg:col-span-6 relative aspect-square rounded-2xl overflow-hidden bg-[color:var(--deep-space)] ring-hairline">
-              {/* concentric rings */}
               {[0.95, 0.7, 0.45, 0.22].map((s) => (
                 <div
                   key={s}
@@ -44,15 +128,12 @@ export function SkyOS() {
                   style={{ width: `${s * 100}%`, height: `${s * 100}%` }}
                 />
               ))}
-              {/* crosshair */}
               <div className="absolute inset-0">
                 <div className="absolute top-1/2 inset-x-0 h-px bg-[color:var(--photonic-cyan)]/15" />
                 <div className="absolute left-1/2 inset-y-0 w-px bg-[color:var(--photonic-cyan)]/15" />
               </div>
-              {/* sweep */}
               <div className="absolute top-1/2 left-1/2 h-1/2 w-1/2 origin-top-left animate-orbit"
                    style={{ background: "conic-gradient(from 0deg, transparent 0deg, oklch(0.86 0.16 220 / 0.25) 30deg, transparent 60deg)" }} />
-              {/* drone dots */}
               {Array.from({ length: 60 }).map((_, i) => {
                 const a = (i / 60) * Math.PI * 2 + i * 0.7;
                 const r = 8 + (i % 8) * 5;
@@ -80,27 +161,70 @@ export function SkyOS() {
               </div>
             </div>
 
-            {/* Right: log */}
-            <div className="lg:col-span-3 glass rounded-2xl p-4 font-mono text-[11px] leading-relaxed text-muted-foreground space-y-1.5 max-h-[420px] overflow-hidden">
-              <div className="text-[color:var(--photonic-cyan)] tracking-[0.25em] uppercase text-[10px] mb-2">// telemetry stream</div>
-              {[
-                "12:42:18  formation A → B  ok",
-                "12:42:19  drift correction Δ 0.04m",
-                "12:42:20  cluster-7 link 5GHz",
-                "12:42:21  light cue #014  start",
-                "12:42:23  battery 76% nominal",
-                "12:42:24  wind shear -2°  stable",
-                "12:42:26  formation B → C  ok",
-                "12:42:27  vertex 412 reassigned",
-                "12:42:28  swarm coherence 0.998",
-                "12:42:30  light cue #015  start",
-                "12:42:31  payload sync 1.2 MB",
-                "12:42:33  attention map +3.4%",
-              ].map((l, i) => (
-                <div key={i} className="opacity-0 animate-[fade-in_.5s_ease_forwards]" style={{ animationDelay: `${i * 0.12}s` }}>
-                  {l}
+            {/* Right: telemetry stream */}
+            <div className="lg:col-span-3 space-y-3">
+              <div className="glass rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)]">
+                    // telemetry stream
+                  </span>
+                  <span className="flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--photonic-cyan)] animate-pulse-glow" />
+                    LIVE
+                  </span>
                 </div>
-              ))}
+
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <div>
+                    <div className="text-[9px] tracking-[0.25em] uppercase text-muted-foreground">Throughput</div>
+                    <Sparkline color="oklch(0.86 0.16 220)" seed={1} />
+                  </div>
+                  <div>
+                    <div className="text-[9px] tracking-[0.25em] uppercase text-muted-foreground">Coherence</div>
+                    <Sparkline color="oklch(0.66 0.22 290)" seed={5} />
+                  </div>
+                </div>
+
+                <div
+                  ref={logRef}
+                  className="font-mono text-[10.5px] leading-relaxed space-y-1 max-h-[260px] overflow-hidden mask-fade-t"
+                >
+                  {logs.map((l, i) => (
+                    <div key={i} className="flex gap-2 animate-[fade-in_.35s_ease_forwards]">
+                      <span className="text-muted-foreground/60 shrink-0">{l.t}</span>
+                      <span className={toneColor[l.tone]}>{l.msg}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="glass rounded-2xl p-4 space-y-2.5">
+                <div className="text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)] mb-1">
+                  // signal
+                </div>
+                {[
+                  { k: "Uplink", v: "22 ms", w: "92%" },
+                  { k: "Mesh", v: "5.2 GHz", w: "78%" },
+                  { k: "GPS Sats", v: "14", w: "88%" },
+                  { k: "Packet Loss", v: "0.02%", w: "12%" },
+                ].map((m) => (
+                  <div key={m.k} className="space-y-1">
+                    <div className="flex items-center justify-between text-[10px] font-mono">
+                      <span className="text-muted-foreground tracking-wider uppercase">{m.k}</span>
+                      <span className="text-[color:var(--photonic-cyan)]">{m.v}</span>
+                    </div>
+                    <div className="h-0.5 rounded-full bg-white/5 overflow-hidden">
+                      <div
+                        className="h-full"
+                        style={{
+                          width: m.w,
+                          background: "linear-gradient(90deg, var(--photonic-cyan), var(--aurora-violet))",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
