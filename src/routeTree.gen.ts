@@ -15,6 +15,7 @@ import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as ExperiencesRouteImport } from './routes/experiences'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as ExperiencesSlugRouteImport } from './routes/experiences.$slug'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -47,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => IndustriesRoute,
+} as any)
 const ExperiencesSlugRoute = ExperiencesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -57,29 +63,32 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/experiences': typeof ExperiencesRouteWithChildren
-  '/industries': typeof IndustriesRoute
+  '/industries': typeof IndustriesRouteWithChildren
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/experiences/$slug': typeof ExperiencesSlugRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/experiences': typeof ExperiencesRouteWithChildren
-  '/industries': typeof IndustriesRoute
+  '/industries': typeof IndustriesRouteWithChildren
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/experiences/$slug': typeof ExperiencesSlugRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/experiences': typeof ExperiencesRouteWithChildren
-  '/industries': typeof IndustriesRoute
+  '/industries': typeof IndustriesRouteWithChildren
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/experiences/$slug': typeof ExperiencesSlugRoute
+  '/industries/$slug': typeof IndustriesSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/experiences/$slug'
+    | '/industries/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/experiences/$slug'
+    | '/industries/$slug'
   id:
     | '__root__'
     | '/'
@@ -109,13 +120,14 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/experiences/$slug'
+    | '/industries/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   ExperiencesRoute: typeof ExperiencesRouteWithChildren
-  IndustriesRoute: typeof IndustriesRoute
+  IndustriesRoute: typeof IndustriesRouteWithChildren
   InsightsRoute: typeof InsightsRoute
   ServicesRoute: typeof ServicesRoute
 }
@@ -164,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/industries/$slug': {
+      id: '/industries/$slug'
+      path: '/$slug'
+      fullPath: '/industries/$slug'
+      preLoaderRoute: typeof IndustriesSlugRouteImport
+      parentRoute: typeof IndustriesRoute
+    }
     '/experiences/$slug': {
       id: '/experiences/$slug'
       path: '/$slug'
@@ -186,11 +205,23 @@ const ExperiencesRouteWithChildren = ExperiencesRoute._addFileChildren(
   ExperiencesRouteChildren,
 )
 
+interface IndustriesRouteChildren {
+  IndustriesSlugRoute: typeof IndustriesSlugRoute
+}
+
+const IndustriesRouteChildren: IndustriesRouteChildren = {
+  IndustriesSlugRoute: IndustriesSlugRoute,
+}
+
+const IndustriesRouteWithChildren = IndustriesRoute._addFileChildren(
+  IndustriesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   ExperiencesRoute: ExperiencesRouteWithChildren,
-  IndustriesRoute: IndustriesRoute,
+  IndustriesRoute: IndustriesRouteWithChildren,
   InsightsRoute: InsightsRoute,
   ServicesRoute: ServicesRoute,
 }
