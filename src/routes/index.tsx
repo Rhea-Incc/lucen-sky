@@ -34,6 +34,7 @@ function Index() {
       <Gallery />
       <SkyOS />
       <Future />
+      <Footer />
     </main>
   );
 }
