@@ -43,7 +43,7 @@ function IndustriesPage() {
         <div className="absolute inset-0 glass-strong rounded-3xl ring-hairline overflow-hidden">
           <SwarmCanvas
             count={780}
-            secondsPerKey={10}
+            secondsPerKey={12}
             shapes={industries.flatMap((i) => [i.shapes[0]])}
           />
           <div className="absolute inset-0 pointer-events-none">

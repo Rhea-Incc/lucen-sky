@@ -41,7 +41,7 @@ export function SwarmCanvas({
   className = "",
   shapes,
   count = 620,
-  secondsPerKey = 10,
+  secondsPerKey = 12,
 }: {
   className?: string;
   shapes?: Shape[];

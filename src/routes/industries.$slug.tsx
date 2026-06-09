@@ -61,7 +61,7 @@ function IndustryPage() {
           className="relative mx-auto w-[90vw] h-[80vh] md:w-[85vw] md:h-[85vh]"
         >
           <div className="absolute inset-0 glass-strong rounded-3xl ring-hairline overflow-hidden">
-            <SwarmCanvas count={760} secondsPerKey={10} shapes={ind.shapes} />
+            <SwarmCanvas count={760} secondsPerKey={12} shapes={ind.shapes} />
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute top-4 left-4 md:top-5 md:left-5 text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)]/80">
                 SWARM · {ind.name.toUpperCase()}
