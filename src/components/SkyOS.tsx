@@ -58,15 +58,24 @@ function Sparkline({ color, seed = 0 }: { color: string; seed?: number }) {
 }
 
 export function SkyOS() {
-  const [logs, setLogs] = useState<LogEntry[]>(() =>
-    LOG_POOL.slice(0, 12).map((l, i) => ({ ...l, t: fmt(new Date(Date.now() - (12 - i) * 1500)) }))
-  );
+  // Start empty on SSR to avoid hydration mismatch; populate client-side.
+  const [logs, setLogs] = useState<LogEntry[]>([]);
   const logRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Seed initial logs on mount (client only)
+    setLogs(
+      LOG_POOL.slice(0, 12).map((l, i) => ({
+        ...l,
+        t: fmt(new Date(Date.now() - (12 - i) * 1500)),
+      }))
+    );
     const id = setInterval(() => {
       setLogs((prev) => {
-        const next = [...prev, { ...LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)], t: fmt(new Date()) }];
+        const next = [
+          ...prev,
+          { ...LOG_POOL[Math.floor(Math.random() * LOG_POOL.length)], t: fmt(new Date()) },
+        ];
         return next.slice(-60);
       });
     }, 900);

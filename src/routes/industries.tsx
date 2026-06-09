@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { Starfield } from "@/components/Starfield";
 import { SwarmCanvas } from "@/components/SwarmCanvas";
+import { Footer } from "@/components/Footer";
 import { industries } from "@/data/industries";
 
 export const Route = createFileRoute("/industries")({
@@ -38,7 +39,7 @@ function IndustriesPage() {
       </section>
 
       {/* Atmospheric showcase — 85% viewport canvas cycling all industry signatures */}
-      <section className="relative mx-auto" style={{ width: "85vw", height: "85vh" }}>
+      <section className="relative mx-auto w-[90vw] h-[80vh] md:w-[85vw] md:h-[85vh]">
         <div className="absolute inset-0 glass-strong rounded-3xl ring-hairline overflow-hidden">
           <SwarmCanvas
             count={780}
@@ -46,14 +47,14 @@ function IndustriesPage() {
             shapes={industries.flatMap((i) => [i.shapes[0]])}
           />
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-5 left-5 text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)]/80">
+            <div className="absolute top-4 left-4 md:top-5 md:left-5 text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)]/80">
               SWARM · ALL VERTICALS
             </div>
-            <div className="absolute top-5 right-5 flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+            <div className="absolute top-4 right-4 md:top-5 md:right-5 flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--photonic-cyan)] animate-pulse-glow" />
               {industries.length} FORMATIONS
             </div>
-            <div className="absolute bottom-5 left-5 right-5 flex justify-between font-mono text-[10px] text-muted-foreground">
+            <div className="absolute bottom-4 left-4 right-4 md:bottom-5 md:left-5 md:right-5 flex justify-between font-mono text-[9px] md:text-[10px] text-muted-foreground">
               <span>MORPH · 10s LINEAR</span>
               <span>NODES · 780</span>
               <span>COHERENCE · 0.998</span>
@@ -103,6 +104,7 @@ function IndustriesPage() {
           </Link>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

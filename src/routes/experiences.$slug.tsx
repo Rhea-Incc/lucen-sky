@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import { Starfield } from "@/components/Starfield";
 import { experiences, getExperience } from "@/data/experiences";
 
@@ -154,6 +155,7 @@ function ExperienceDetail() {
           ))}
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

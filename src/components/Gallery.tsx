@@ -27,13 +27,13 @@ export function Gallery() {
 
       {/* Asymmetric mosaic — no horizontal scroll */}
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid grid-cols-12 auto-rows-[180px] gap-4 md:gap-5">
+        <div className="grid grid-cols-12 auto-rows-[220px] md:auto-rows-[180px] gap-4 md:gap-5">
           {items.map((it, i) => {
             const spans = [
-              "col-span-12 md:col-span-7 row-span-3",
+              "col-span-12 md:col-span-7 row-span-2 md:row-span-3",
               "col-span-12 md:col-span-5 row-span-2",
-              "col-span-6 md:col-span-5 row-span-2",
-              "col-span-6 md:col-span-4 row-span-2",
+              "col-span-12 sm:col-span-6 md:col-span-5 row-span-2",
+              "col-span-12 sm:col-span-6 md:col-span-4 row-span-2",
               "col-span-12 md:col-span-3 row-span-2",
             ];
             return (

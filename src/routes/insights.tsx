@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import { Starfield } from "@/components/Starfield";
 import bust from "@/assets/media-bust.jpg.asset.json";
 import cairo from "@/assets/media-cairo.png.asset.json";
@@ -98,6 +99,7 @@ function InsightsPage() {
           </article>
         ))}
       </section>
+      <Footer />
     </main>
   );
 }
