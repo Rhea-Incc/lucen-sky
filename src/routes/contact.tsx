@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import { Future } from "@/components/Future";
 
 export const Route = createFileRoute("/contact")({
@@ -21,6 +22,7 @@ function ContactPage() {
       <div className="pt-20">
         <Future />
       </div>
+      <Footer />
     </main>
   );
 }

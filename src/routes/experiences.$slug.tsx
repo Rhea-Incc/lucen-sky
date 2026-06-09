@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import { Starfield } from "@/components/Starfield";
 import { experiences, getExperience } from "@/data/experiences";
 
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/experiences/$slug")({
   notFoundComponent: () => (
     <main className="min-h-screen grid place-items-center text-muted-foreground">
       Experience not found. <Link to="/experiences" className="ml-2 text-[color:var(--photonic-cyan)]">Back to atlas →</Link>
+      <Footer />
     </main>
   ),
   errorComponent: ({ error }) => (
