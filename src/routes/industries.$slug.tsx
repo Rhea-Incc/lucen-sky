@@ -56,18 +56,20 @@ function IndustryPage() {
           </h1>
         </div>
 
-        <div className="relative mx-auto" style={{ width: "85vw", height: "85vh" }}>
+        <div
+          className="relative mx-auto w-[90vw] h-[80vh] md:w-[85vw] md:h-[85vh]"
+        >
           <div className="absolute inset-0 glass-strong rounded-3xl ring-hairline overflow-hidden">
             <SwarmCanvas count={760} secondsPerKey={10} shapes={ind.shapes} />
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-5 left-5 text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)]/80">
+              <div className="absolute top-4 left-4 md:top-5 md:left-5 text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)]/80">
                 SWARM · {ind.name.toUpperCase()}
               </div>
-              <div className="absolute top-5 right-5 flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+              <div className="absolute top-4 right-4 md:top-5 md:right-5 flex items-center gap-2 text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
                 <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--photonic-cyan)] animate-pulse-glow" />
                 LIVE FORMATION
               </div>
-              <div className="absolute bottom-5 left-5 right-5 flex flex-wrap justify-between gap-4 font-mono text-[10px] text-muted-foreground">
+              <div className="absolute bottom-4 left-4 right-4 md:bottom-5 md:left-5 md:right-5 flex flex-wrap justify-between gap-3 font-mono text-[9px] md:text-[10px] text-muted-foreground">
                 <span>KEYFRAMES · {ind.shapes.length}</span>
                 <span>MORPH · 10s LINEAR</span>
                 <span>COHERENCE · 0.998</span>
