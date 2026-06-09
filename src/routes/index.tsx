@@ -5,6 +5,7 @@ import { Formation } from "@/components/Formation";
 import { Gallery } from "@/components/Gallery";
 import { SkyOS } from "@/components/SkyOS";
 import { Future } from "@/components/Future";
+import { Footer } from "@/components/Footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
