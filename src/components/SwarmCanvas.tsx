@@ -26,9 +26,11 @@ const DEFAULT_SHAPES: Shape[] = [
   { kind: "ring" },
   { kind: "grid" },
   { kind: "spiral" },
+  { kind: "starburst" },
   { kind: "arc" },
   { kind: "lemniscate" },
   { kind: "sphere" },
+  { kind: "constellation" },
   { kind: "wave" },
   { kind: "text", text: "LUCENSKY", weights: [1.0, 0.85, 0.7, 0.55, 0.55, 0.7, 0.85, 1.0] },
 ];
