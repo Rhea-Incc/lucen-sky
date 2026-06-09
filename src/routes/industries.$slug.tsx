@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { Starfield } from "@/components/Starfield";
 import { SwarmCanvas } from "@/components/SwarmCanvas";
+import { Footer } from "@/components/Footer";
 import { industries, getIndustry, type Industry } from "@/data/industries";
 
 export const Route = createFileRoute("/industries/$slug")({
