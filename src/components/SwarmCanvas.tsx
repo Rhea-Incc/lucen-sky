@@ -318,7 +318,7 @@ export function SwarmCanvas({
       const A = targets[segIdx];
       const B = targets[(segIdx + 1) % segs];
 
-      ctx.fillStyle = "oklch(0.08 0.012 250 / 0.22)";
+      ctx.fillStyle = "oklch(0.08 0.012 250 / 0.18)";
       ctx.fillRect(0, 0, w, h);
 
       for (let i = 0; i < COUNT; i++) {
@@ -326,14 +326,16 @@ export function SwarmCanvas({
         const tx = A[i].x + (B[i].x - A[i].x) * u;
         const ty = A[i].y + (B[i].y - A[i].y) * u;
         const dx = tx - p.x, dy = ty - p.y;
-        // critically-damped spring — no settle, constant motion
-        p.vx = (p.vx + dx * 0.11) * 0.74;
-        p.vy = (p.vy + dy * 0.11) * 0.74;
-        p.x += p.vx; p.y += p.vy;
-        const a = 0.7 + Math.sin(t * 2 + p.x * 0.01) * 0.3;
+        // continuous-pursuit: higher stiffness + damping for smooth tracking
+        p.vx = (p.vx + dx * 0.16) * 0.80;
+        p.vy = (p.vy + dy * 0.16) * 0.80;
+        // tiny brownian noise so the swarm never feels frozen
+        p.x += p.vx + (Math.random() - 0.5) * 0.18;
+        p.y += p.vy + (Math.random() - 0.5) * 0.18;
+        const a = 0.65 + Math.sin(t * 2 + p.x * 0.01) * 0.3;
         ctx.fillStyle = `oklch(0.9 0.16 ${p.hue} / ${a})`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
         ctx.fill();
       }
       raf = requestAnimationFrame(loop);
