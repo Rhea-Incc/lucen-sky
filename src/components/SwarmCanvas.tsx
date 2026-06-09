@@ -278,6 +278,25 @@ export function SwarmCanvas({
             const side = i % 2 === 0 ? 1 : -1;
             return { x: cx + R * 0.9 + v * R * 0.25, y: cy + side * v * R * 0.4 };
           });
+        case "starburst": {
+          const rays = s.rays ?? 12;
+          return sample((u, i) => {
+            const ray = i % rays;
+            const a = (ray / rays) * Math.PI * 2;
+            const rr = ((i * 37) % 100) / 100;
+            const len = R * (0.4 + rr * 0.9);
+            return { x: cx + Math.cos(a) * len, y: cy + Math.sin(a) * len };
+          });
+        }
+        case "constellation":
+          return sample((_, i) => {
+            // pseudo-random scattered stars with soft clustering
+            const a = (i * 2.399) % (Math.PI * 2);
+            const rr = Math.sqrt(((i * 53) % 100) / 100) * R * 1.15;
+            const jitterX = (((i * 91) % 100) / 100 - 0.5) * R * 0.15;
+            const jitterY = (((i * 17) % 100) / 100 - 0.5) * R * 0.15;
+            return { x: cx + Math.cos(a) * rr + jitterX, y: cy + Math.sin(a) * rr * 0.8 + jitterY };
+          });
         case "text":
           return buildText(s.text, s.weights);
       }
