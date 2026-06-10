@@ -27,10 +27,8 @@ export const industries: Industry[] = [
     ],
     shapes: [
       { kind: "text", text: "LUX" },
+      { kind: "starburst", rays: 16 },
       { kind: "heart" },
-      { kind: "ring" },
-      { kind: "text", text: "RETAIL" },
-      { kind: "lemniscate" },
     ],
     metrics: [
       { k: "Dwell Uplift", v: "+38%" },
@@ -51,11 +49,9 @@ export const industries: Industry[] = [
       "Sales centres report dramatic compression in the sales cycle when the sky becomes the brochure.",
     ],
     shapes: [
-      { kind: "house" },
+      { kind: "apartment", floors: 9 },
       { kind: "skyline" },
-      { kind: "text", text: "ESTATE" },
-      { kind: "grid" },
-      { kind: "columns", n: 6 },
+      { kind: "house" },
     ],
     metrics: [
       { k: "Time to Deposit", v: "−41%" },
@@ -76,11 +72,9 @@ export const industries: Industry[] = [
       "The sky show becomes the lead asset for the next twelve months of campaign creative.",
     ],
     shapes: [
+      { kind: "sportscar" },
       { kind: "wheel" },
       { kind: "text", text: "DRIVE" },
-      { kind: "arc" },
-      { kind: "lemniscate" },
-      { kind: "ring" },
     ],
     metrics: [
       { k: "Test-Drive Bookings", v: "+57%" },
@@ -101,11 +95,9 @@ export const industries: Industry[] = [
       "The result is the most photographed evening of the academic year and a measurable lift in applications.",
     ],
     shapes: [
-      { kind: "text", text: "LEARN" },
+      { kind: "constellation" },
       { kind: "columns", n: 5 },
-      { kind: "spiral" },
-      { kind: "plus" },
-      { kind: "sphere" },
+      { kind: "text", text: "LEARN" },
     ],
     metrics: [
       { k: "Open-Day Capture", v: "+44%" },
@@ -128,9 +120,7 @@ export const industries: Industry[] = [
     shapes: [
       { kind: "antenna" },
       { kind: "wave" },
-      { kind: "sphere" },
-      { kind: "text", text: "SIGNAL" },
-      { kind: "grid" },
+      { kind: "starburst", rays: 10 },
     ],
     metrics: [
       { k: "Upgrade Intent", v: "+33%" },
@@ -151,11 +141,9 @@ export const industries: Industry[] = [
       "We pair atmospheric shows with branch open-days to translate spectacle into appointments.",
     ],
     shapes: [
+      { kind: "dome" },
       { kind: "columns", n: 7 },
-      { kind: "plus" },
-      { kind: "ring" },
       { kind: "text", text: "TRUST" },
-      { kind: "grid" },
     ],
     metrics: [
       { k: "Consideration Lift", v: "+29%" },
@@ -178,9 +166,7 @@ export const industries: Industry[] = [
     shapes: [
       { kind: "plane" },
       { kind: "arc" },
-      { kind: "text", text: "TRANSIT" },
       { kind: "grid" },
-      { kind: "wave" },
     ],
     metrics: [
       { k: "Dwell ROI", v: "8.2×" },
@@ -203,9 +189,7 @@ export const industries: Industry[] = [
     shapes: [
       { kind: "plus" },
       { kind: "heartbeat" },
-      { kind: "heart" },
-      { kind: "text", text: "VITALS" },
-      { kind: "sphere" },
+      { kind: "pill" },
     ],
     metrics: [
       { k: "Training Retention", v: "+24%" },
