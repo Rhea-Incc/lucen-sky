@@ -101,6 +101,11 @@ function AuthPage() {
               className="w-full glass rounded-2xl px-4 py-3 text-sm bg-transparent outline-none focus:ring-2 focus:ring-[color:var(--photonic-cyan)]/50"
             />
             {error && <div className="text-xs text-red-400">{error}</div>}
+            {info && (
+              <div className="text-xs text-[color:var(--photonic-cyan)] glass rounded-2xl px-3 py-2 ring-hairline">
+                {info}
+              </div>
+            )}
             <button
               type="submit"
               disabled={loading}
