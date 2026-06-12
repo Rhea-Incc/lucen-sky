@@ -11,8 +11,12 @@ export type Industry = {
   stat: string;
   statNote: string;
   story: string[];
-  /** Exactly three keyframes — the signature 3-phase morph. */
+  /** Exactly three keyframes — the signature 3-phase morph, tailored per industry. */
   shapes: [Shape, Shape, Shape];
+  /** Per-industry morph cadence — seconds per keyframe. Defaults to 12s. */
+  secondsPerKey?: number;
+  /** Per-industry particle density override. */
+  particles?: number;
   metrics: Insight[];
   /** Sector-tailored stats for the infographic bar chart. */
   infographic: InfographicBar[];
@@ -23,6 +27,7 @@ export type Industry = {
   /** Telemetry feed snippets shown in the corner HUD. */
   telemetry: string[];
 };
+
 
 export const industries: Industry[] = [
   {
