@@ -60,7 +60,7 @@ function IndustryPage() {
         {/* 3-phase morph canvas — 80vh mobile / 85vh desktop */}
         <div className="relative mx-auto w-[92vw] h-[80vh] md:w-[85vw] md:h-[85vh]">
           <div className="absolute inset-0 glass-strong rounded-3xl ring-hairline overflow-hidden">
-            <SwarmCanvas count={760} secondsPerKey={12} shapes={ind.shapes} />
+            <SwarmCanvas count={ind.particles ?? 760} secondsPerKey={ind.secondsPerKey ?? 12} shapes={ind.shapes} />
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute top-3 left-3 md:top-5 md:left-5 text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-[color:var(--photonic-cyan)]/80">
                 SWARM · {ind.name.toUpperCase()}
