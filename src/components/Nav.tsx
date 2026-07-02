@@ -32,6 +32,12 @@ export function Nav() {
           </nav>
           <div className="flex items-center gap-2">
             <Link
+              to="/auth"
+              className="hidden sm:inline-flex rounded-full glass px-3 md:px-4 py-1.5 text-[10px] md:text-xs tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Sign in
+            </Link>
+            <Link
               to="/contact"
               className="rounded-full border border-[color:var(--photonic-cyan)]/40 text-[color:var(--photonic-cyan)] px-3 md:px-4 py-1.5 text-[10px] md:text-xs tracking-[0.18em] uppercase hover:bg-[color:var(--photonic-cyan)]/10 transition-colors"
             >
