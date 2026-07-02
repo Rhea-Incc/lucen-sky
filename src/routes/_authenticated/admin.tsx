@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Navigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -36,10 +36,13 @@ function AdminPage() {
   const stageFn = useServerFn(updateOnboardingStage);
   const saveSiteFn = useServerFn(updateSiteInfo);
 
-  const submissions = useQuery({ queryKey: ["admin-submissions"], queryFn: () => submissionsFn() });
-  const onboarding = useQuery({ queryKey: ["admin-onboarding"], queryFn: () => onboardingFn() });
-  const site = useQuery({ queryKey: ["site-info"], queryFn: () => siteFn() });
   const role = useQuery({ queryKey: ["my-role"], queryFn: () => roleFn() });
+  const roles = role.data?.roles ?? [];
+  const isStaff = roles.some((r) => r === "admin" || r === "editor");
+
+  const submissions = useQuery({ queryKey: ["admin-submissions"], queryFn: () => submissionsFn(), enabled: isStaff });
+  const onboarding = useQuery({ queryKey: ["admin-onboarding"], queryFn: () => onboardingFn(), enabled: isStaff });
+  const site = useQuery({ queryKey: ["site-info"], queryFn: () => siteFn(), enabled: isStaff });
 
   const mutStatus = useMutation({
     mutationFn: (v: { id: string; status: any }) => statusFn({ data: v }),
@@ -64,6 +67,11 @@ function AdminPage() {
     await supabase.auth.signOut();
     navigate({ to: "/auth", replace: true });
   };
+
+  // Client accounts get redirected to their portal — admin console is staff-only.
+  if (role.isFetched && !isStaff) {
+    return <Navigate to="/portal" replace />;
+  }
 
   return (
     <main className="relative min-h-screen">

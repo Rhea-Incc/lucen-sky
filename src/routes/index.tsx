@@ -4,6 +4,7 @@ import { Hero } from "@/components/Hero";
 import { Formation } from "@/components/Formation";
 import { Gallery } from "@/components/Gallery";
 import { SkyOS } from "@/components/SkyOS";
+import { HomeContact } from "@/components/HomeContact";
 import { Future } from "@/components/Future";
 import { Footer } from "@/components/Footer";
 
@@ -33,6 +34,7 @@ function Index() {
       <Formation />
       <Gallery />
       <SkyOS />
+      <HomeContact />
       <Future />
       <Footer />
     </main>

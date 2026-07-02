@@ -19,6 +19,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as ExperiencesSlugRouteImport } from './routes/experiences.$slug'
+import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -70,6 +71,11 @@ const ExperiencesSlugRoute = ExperiencesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ExperiencesRoute,
 } as any)
+const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/portal': typeof AuthenticatedPortalRoute
   '/experiences/$slug': typeof ExperiencesSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
 }
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/portal': typeof AuthenticatedPortalRoute
   '/experiences/$slug': typeof ExperiencesSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
 }
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/portal': typeof AuthenticatedPortalRoute
   '/experiences/$slug': typeof ExperiencesSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
 }
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/admin'
+    | '/portal'
     | '/experiences/$slug'
     | '/industries/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/admin'
+    | '/portal'
     | '/experiences/$slug'
     | '/industries/$slug'
   id:
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/services'
     | '/_authenticated/admin'
+    | '/_authenticated/portal'
     | '/experiences/$slug'
     | '/industries/$slug'
   fileRoutesById: FileRoutesById
@@ -237,6 +249,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExperiencesSlugRouteImport
       parentRoute: typeof ExperiencesRoute
     }
+    '/_authenticated/portal': {
+      id: '/_authenticated/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof AuthenticatedPortalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -249,10 +268,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedPortalRoute: AuthenticatedPortalRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -295,13 +316,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
