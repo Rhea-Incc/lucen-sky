@@ -6,10 +6,21 @@ import { Starfield } from "@/components/Starfield";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
-    meta: [{ title: "Sign in — Lucen Sky Flight Deck" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Sign in — Lucen Sky" }, { name: "robots", content: "noindex" }],
   }),
   component: AuthPage,
 });
+
+async function routeByRole(navigate: ReturnType<typeof useNavigate>) {
+  const { data: userRes } = await supabase.auth.getUser();
+  if (!userRes.user) return;
+  const { data: roles } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userRes.user.id);
+  const isStaff = (roles ?? []).some((r: any) => r.role === "admin" || r.role === "editor");
+  navigate({ to: isStaff ? "/admin" : "/portal", replace: true });
+}
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -22,7 +33,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/admin" });
+      if (data.user) routeByRole(navigate);
     });
   }, [navigate]);
 
@@ -35,19 +46,19 @@ function AuthPage() {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/admin" });
+        await routeByRole(navigate);
       } else {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
+          options: { emailRedirectTo: `${window.location.origin}/portal` },
         });
         if (error) throw error;
         if (data.session) {
-          navigate({ to: "/admin" });
+          await routeByRole(navigate);
         } else {
           setInfo(
-            `Clearance pending — we've dispatched a confirmation flight plan to ${email}. Open it to complete pre-flight checks, then return here to sign in.`,
+            `Clearance pending — a confirmation link is en route to ${email}. Open it, then sign in to reach your client portal.`,
           );
           setMode("signin");
           setPassword("");
@@ -72,12 +83,12 @@ function AuthPage() {
             Flight Deck · Restricted
           </div>
           <h1 className="font-display text-3xl text-grad font-light">
-            {mode === "signin" ? "Clear for takeoff" : "Request clearance"}
+            {mode === "signin" ? "Sign in" : "Open a client account"}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {mode === "signin"
-              ? "Sign in to the Lucen Sky operations console."
-              : "First operator becomes admin automatically."}
+              ? "Access your client portal — briefs, quotes and flight plans."
+              : "Client accounts are for brands and producers. Ops staff are provisioned separately."}
           </p>
 
           <form onSubmit={submit} className="mt-6 space-y-3">
