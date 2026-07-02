@@ -40,11 +40,6 @@ function AdminPage() {
   const roles = role.data?.roles ?? [];
   const isStaff = roles.some((r) => r === "admin" || r === "editor");
 
-  // Client accounts get redirected to the portal — admin routes require staff.
-  if (role.isFetched && !isStaff) {
-    return <Navigate to="/portal" replace />;
-  }
-
   const submissions = useQuery({ queryKey: ["admin-submissions"], queryFn: () => submissionsFn(), enabled: isStaff });
   const onboarding = useQuery({ queryKey: ["admin-onboarding"], queryFn: () => onboardingFn(), enabled: isStaff });
   const site = useQuery({ queryKey: ["site-info"], queryFn: () => siteFn(), enabled: isStaff });
@@ -72,6 +67,11 @@ function AdminPage() {
     await supabase.auth.signOut();
     navigate({ to: "/auth", replace: true });
   };
+
+  // Client accounts get redirected to their portal — admin console is staff-only.
+  if (role.isFetched && !isStaff) {
+    return <Navigate to="/portal" replace />;
+  }
 
   return (
     <main className="relative min-h-screen">
