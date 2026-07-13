@@ -68,10 +68,37 @@ function AdminPage() {
     navigate({ to: "/auth", replace: true });
   };
 
+  // Explicit loading / error states before deciding staff vs client redirect.
+  if (role.isLoading) {
+    return (
+      <main className="relative min-h-screen">
+        <Nav />
+        <div className="pt-40 text-center text-sm text-muted-foreground">Verifying clearance…</div>
+      </main>
+    );
+  }
+  if (role.error) {
+    return (
+      <main className="relative min-h-screen">
+        <Nav />
+        <div className="pt-40 mx-auto max-w-md text-center">
+          <div className="text-[10px] tracking-[0.3em] uppercase text-red-300 mb-2">Role unavailable</div>
+          <p className="text-sm text-muted-foreground mb-4">
+            We couldn't confirm your ops clearance. Your session may be stale.
+          </p>
+          <div className="flex gap-2 justify-center">
+            <button onClick={() => role.refetch()} className="rounded-full glass px-4 py-2 text-xs uppercase tracking-[0.2em]">Retry</button>
+            <button onClick={signOut} className="rounded-full border border-[color:var(--photonic-cyan)]/40 text-[color:var(--photonic-cyan)] px-4 py-2 text-xs uppercase tracking-[0.2em]">Sign out</button>
+          </div>
+        </div>
+      </main>
+    );
+  }
   // Client accounts get redirected to their portal — admin console is staff-only.
-  if (role.isFetched && !isStaff) {
+  if (!isStaff) {
     return <Navigate to="/portal" replace />;
   }
+
 
   return (
     <main className="relative min-h-screen">
