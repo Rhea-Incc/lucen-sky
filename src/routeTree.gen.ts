@@ -21,6 +21,8 @@ import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as ExperiencesSlugRouteImport } from './routes/experiences.$slug'
 import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedPortalSettingsRouteImport } from './routes/_authenticated/portal.settings'
+import { Route as AuthenticatedPortalMediaRouteImport } from './routes/_authenticated/portal.media'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -81,6 +83,18 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPortalSettingsRoute =
+  AuthenticatedPortalSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedPortalRoute,
+  } as any)
+const AuthenticatedPortalMediaRoute =
+  AuthenticatedPortalMediaRouteImport.update({
+    id: '/media',
+    path: '/media',
+    getParentRoute: () => AuthenticatedPortalRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -91,9 +105,11 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/portal': typeof AuthenticatedPortalRoute
+  '/portal': typeof AuthenticatedPortalRouteWithChildren
   '/experiences/$slug': typeof ExperiencesSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/portal/media': typeof AuthenticatedPortalMediaRoute
+  '/portal/settings': typeof AuthenticatedPortalSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -104,9 +120,11 @@ export interface FileRoutesByTo {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRoute
-  '/portal': typeof AuthenticatedPortalRoute
+  '/portal': typeof AuthenticatedPortalRouteWithChildren
   '/experiences/$slug': typeof ExperiencesSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/portal/media': typeof AuthenticatedPortalMediaRoute
+  '/portal/settings': typeof AuthenticatedPortalSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -119,9 +137,11 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRoute
   '/services': typeof ServicesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
-  '/_authenticated/portal': typeof AuthenticatedPortalRoute
+  '/_authenticated/portal': typeof AuthenticatedPortalRouteWithChildren
   '/experiences/$slug': typeof ExperiencesSlugRoute
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/_authenticated/portal/media': typeof AuthenticatedPortalMediaRoute
+  '/_authenticated/portal/settings': typeof AuthenticatedPortalSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +157,8 @@ export interface FileRouteTypes {
     | '/portal'
     | '/experiences/$slug'
     | '/industries/$slug'
+    | '/portal/media'
+    | '/portal/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,6 +172,8 @@ export interface FileRouteTypes {
     | '/portal'
     | '/experiences/$slug'
     | '/industries/$slug'
+    | '/portal/media'
+    | '/portal/settings'
   id:
     | '__root__'
     | '/'
@@ -164,6 +188,8 @@ export interface FileRouteTypes {
     | '/_authenticated/portal'
     | '/experiences/$slug'
     | '/industries/$slug'
+    | '/_authenticated/portal/media'
+    | '/_authenticated/portal/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -263,17 +289,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/portal/settings': {
+      id: '/_authenticated/portal/settings'
+      path: '/settings'
+      fullPath: '/portal/settings'
+      preLoaderRoute: typeof AuthenticatedPortalSettingsRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
+    }
+    '/_authenticated/portal/media': {
+      id: '/_authenticated/portal/media'
+      path: '/media'
+      fullPath: '/portal/media'
+      preLoaderRoute: typeof AuthenticatedPortalMediaRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
+    }
   }
 }
 
+interface AuthenticatedPortalRouteChildren {
+  AuthenticatedPortalMediaRoute: typeof AuthenticatedPortalMediaRoute
+  AuthenticatedPortalSettingsRoute: typeof AuthenticatedPortalSettingsRoute
+}
+
+const AuthenticatedPortalRouteChildren: AuthenticatedPortalRouteChildren = {
+  AuthenticatedPortalMediaRoute: AuthenticatedPortalMediaRoute,
+  AuthenticatedPortalSettingsRoute: AuthenticatedPortalSettingsRoute,
+}
+
+const AuthenticatedPortalRouteWithChildren =
+  AuthenticatedPortalRoute._addFileChildren(AuthenticatedPortalRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
-  AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedPortalRoute: typeof AuthenticatedPortalRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
-  AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedPortalRoute: AuthenticatedPortalRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
