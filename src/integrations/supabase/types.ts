@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_media_requests: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          kind: string
+          requested_delivery: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind?: string
+          requested_delivery?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind?: string
+          requested_delivery?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       client_onboarding: {
         Row: {
           assignee: string | null
@@ -58,6 +94,36 @@ export type Database = {
           },
         ]
       }
+      client_profiles: {
+        Row: {
+          company: string | null
+          created_at: string
+          display_name: string | null
+          notification_email: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          display_name?: string | null
+          notification_email?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          display_name?: string | null
+          notification_email?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           callback: boolean
@@ -70,6 +136,7 @@ export type Database = {
           intent: string | null
           message: string | null
           name: string
+          owner_user_id: string | null
           phone: string | null
           source: string | null
           status: string
@@ -86,6 +153,7 @@ export type Database = {
           intent?: string | null
           message?: string | null
           name: string
+          owner_user_id?: string | null
           phone?: string | null
           source?: string | null
           status?: string
@@ -102,6 +170,7 @@ export type Database = {
           intent?: string | null
           message?: string | null
           name?: string
+          owner_user_id?: string | null
           phone?: string | null
           source?: string | null
           status?: string
